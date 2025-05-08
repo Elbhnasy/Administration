@@ -58,3 +58,102 @@ To return to the GNOME GUI session (usually on TTY2):
   sudo systemctl restart gdm
   sudo reboot
   ```
+
+# 📁 Linux Filesystem Overview (Quick Revision)
+
+This is a quick reference to the main Linux filesystem directories and their purposes.
+
+---
+
+## 🌲 Root Directory `/`
+
+- Top-level directory; everything starts from here.
+
+---
+
+## 🏠 `/home`  
+- User directories (e.g., `/home/alice`).
+
+## 👑 `/root`  
+- Home of the `root` (admin) user.
+
+---
+
+## ⚙️ `/bin`  
+- Essential commands for all users (`ls`, `cp`, etc.).
+
+## 🔧 `/sbin`  
+- System/admin commands (`reboot`, `fsck`).
+
+## 📦 `/usr`  
+- User software and libraries.
+  - `/usr/bin`, `/usr/sbin`, `/usr/lib`, etc.
+
+## 📚 `/lib` and `/lib64`  
+- Shared libraries needed by `/bin` and `/sbin`.
+
+---
+
+## 📝 `/etc`  
+- System configuration files (`passwd`, `hosts`, etc.).
+
+## 💾 `/var`  
+- Variable data: logs, mail, cache (`/var/log`, `/var/spool`).
+
+## 🧠 `/proc`  
+- Virtual system info (CPU, memory, processes).
+
+## 💻 `/dev`  
+- Device files (`/dev/sda`, `/dev/null`).
+
+---
+
+## 🧪 `/tmp`  
+- Temporary files; cleared on reboot.
+
+## 📁 `/mnt`  
+- Temporary mount point (e.g., for admin).
+
+## 💿 `/media`  
+- Auto-mounted external drives (USB, DVD).
+
+## 📦 `/opt`  
+- Optional third-party software.
+
+## 🚀 `/boot`  
+- Kernel and bootloader files.
+
+## 🔄 `/run`  
+- Runtime data (PID files, sockets); resets on reboot.
+
+---
+
+## 📑 Summary Table
+
+| Directory | Purpose                       |
+|-----------|-------------------------------|
+| `/`       | Root of the system            |
+| `/home`   | User files                    |
+| `/root`   | Admin home                    |
+| `/bin`    | Basic commands                |
+| `/sbin`   | System commands               |
+| `/usr`    | User software                 |
+| `/lib`    | Libraries                     |
+| `/etc`    | Config files                  |
+| `/var`    | Logs, cache, spool            |
+| `/proc`   | Kernel & process info         |
+| `/dev`    | Devices                       |
+| `/tmp`    | Temporary files               |
+| `/mnt`    | Manual mounts                 |
+| `/media`  | Auto mounts (USB, etc.)       |
+| `/opt`    | Optional software             |
+| `/boot`   | Bootloader & kernel           |
+| `/run`    | Runtime data                  |
+
+---
+
+## 📚 Tip
+
+Use `man hier` in the terminal for the official directory structure guide.
+
+---
