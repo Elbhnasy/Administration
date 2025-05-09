@@ -310,3 +310,62 @@ This section extends basic Linux commands with options for listing files, managi
 - Use `jobs`, `fg`, and `bg` to manage foreground/background tasks.
 
 ---
+# ⌨️ Linux Shortcuts & System Commands 
+
+Useful keyboard shortcuts and system power commands to streamline terminal usage and manage the system.
+
+---
+
+## 🧭 Cursor Movement & Text Editing
+
+| Shortcut     | Description                                            |
+|--------------|--------------------------------------------------------|
+| `Ctrl + A`   | Move cursor to the **beginning** of the line           |
+| `Ctrl + E`   | Move cursor to the **end** of the line                 |
+| `Ctrl + K`   | Delete from cursor to the **end** of the line          |
+| `Ctrl + U`   | Delete from cursor to the **beginning** of the line    |
+| `Ctrl + Y`   | **Paste** text cut by `Ctrl + K` or `Ctrl + U`         |
+
+---
+
+## 🖥️ Terminal & Process Control
+
+| Shortcut     | Description                                            |
+|--------------|--------------------------------------------------------|
+| `Ctrl + D`   | Logout / exit shell, or delete character under cursor  |
+| `Ctrl + L`   | Clear the terminal screen                              |
+| `Ctrl + C`   | Cancel the current command                             |
+| `Ctrl + Z`   | Suspend the current foreground process                 |
+| `Ctrl + S`   | Pause terminal output (XOFF)                           |
+| `Ctrl + Q`   | Resume terminal output (XON)                           |
+
+---
+
+## 🔄 Reboot & Shutdown Commands
+
+| Command                | Description                          |
+|------------------------|--------------------------------------|
+| `reboot`               | Restart the system                   |
+| `shutdown -r now`      | Shutdown and restart immediately     |
+| `systemctl reboot`     | Reboot using systemd                 |
+| `init 6`               | Reboot via runlevel change           |
+| `shutdown -h now`      | Shutdown immediately                 |
+| `systemctl shutdown`   | Shutdown using systemd               |
+| `init 0`               | Halt the system                      |
+
+---
+
+## 🧪 Command Chaining
+
+| Command         | Description                                       |
+|------------------|--------------------------------------------------|
+| `ls; date`       | Run `ls` and then `date` in sequence             |
+
+---
+
+## ✅ Tip
+
+- Combine shortcuts with command history (`↑`, `↓`) for faster navigation.
+- Use `man shutdown` or `man systemctl` for more options.
+
+---
