@@ -10,9 +10,9 @@ Originally, TTYs were physical terminals. In modern systems, they are implemente
 
 ## 🧭 Purpose of TTY
 
-- Provides a **fallback interface** when the GUI crashes or fails to load.
-- Allows **low-level system access** for maintenance or administration.
-- Useful for **multi-user sessions**, scripting, and diagnostics.
+- Provides a **fallback interface** when the GUI crashes or fails to load
+- Allows **low-level system access** for maintenance or administration
+- Useful for **multi-user sessions**, scripting, and diagnostics
 
 ---
 
@@ -23,349 +23,247 @@ Originally, TTYs were physical terminals. In modern systems, they are implemente
 To switch from the GNOME GUI to a TTY console:
 
 1. Press one of the following key combinations:
-
-Ctrl + Alt + F3
-Ctrl + Alt + F4
-Ctrl + Alt + F5
-
-2. chvt <tty_number> (e.g., chvt 3)
----
+   - **Ctrl + Alt + F3**
+   - **Ctrl + Alt + F4**
+   - **Ctrl + Alt + F5**
+   - **Ctrl + Alt + F6**
 
 > ✅ In RHEL 9, TTYs typically start from **F3** to **F6**.
 
-2. A black screen with a login prompt will appear:
+2. Alternatively, use the `chvt` command (if you have appropriate permissions):
+   ```bash
+   sudo chvt 3    # Switch to TTY3
+   ```
 
-3. Enter your **username** and **password** to access the shell.
-
----
+3. A black screen with a login prompt will appear where you can enter your **username** and **password** to access the shell.
 
 ### ↩️ From TTY Back to GUI
 
-To return to the GNOME GUI session (usually on TTY2):
+To return to the GNOME GUI session:
 
-1. Press **Ctrl + Alt + F2**.
-2. You will be taken back to the graphical interface.
----
+1. Press **Ctrl + Alt + F2**
+2. You will be taken back to the graphical interface
 
 > 📌 RHEL 9 uses **TTY2** for the GNOME graphical session by default.
 
 ---
 
-## 🛠️ Example Use Cases
+## 🛠️ Example Use Cases for TTY
 
-- Restart graphical session:  
+- Restart a failed graphical session:  
   ```bash
   sudo systemctl restart gdm
+  ```
+
+- Troubleshoot when X server fails:
+  ```bash
+  # Check X server logs
+  cat /var/log/Xorg.0.log | grep EE
+  
+  # Restart the system
   sudo reboot
   ```
 
-# 📁 Linux Filesystem Overview 
-
-This is a quick reference to the main Linux filesystem directories and their purposes.
-
----
-
-## 🌲 Root Directory `/`
-
-- Top-level directory; everything starts from here.
+- Install graphics drivers from command line:
+  ```bash
+  sudo dnf install kernel-devel
+  sudo dnf install gcc
+  # Run driver installation script
+  ```
 
 ---
 
-## 🏠 `/home`  
-- User directories (e.g., `/home/alice`).
+# 📁 Linux Filesystem Hierarchy
 
-## 👑 `/root`  
-- Home of the `root` (admin) user.
+This is a comprehensive reference to the main Linux filesystem directories and their purposes.
 
 ---
 
-## ⚙️ `/bin`  
-- Essential commands for all users (`ls`, `cp`, etc.).
+## 🌲 Root Structure
 
-## 🔧 `/sbin`  
-- System/admin commands (`reboot`, `fsck`).
-
-## 📦 `/usr`  
-- User software and libraries.
-  - `/usr/bin`, `/usr/sbin`, `/usr/lib`, etc.
-
-## 📚 `/lib` and `/lib64`  
-- Shared libraries needed by `/bin` and `/sbin`.
+| Directory | Purpose                           | Examples                              |
+|-----------|-----------------------------------|---------------------------------------|
+| `/`       | Root of filesystem hierarchy      | Contains all other directories        |
+| `/home`   | User home directories             | `/home/alice`, `/home/bob`            |
+| `/root`   | Home directory for `root` user    | Configuration files for root user     |
 
 ---
 
-## 📝 `/etc`  
-- System configuration files (`passwd`, `hosts`, etc.).
+## ⚙️ System Binaries & Libraries
 
-## 💾 `/var`  
-- Variable data: logs, mail, cache (`/var/log`, `/var/spool`).
-
-## 🧠 `/proc`  
-- Virtual system info (CPU, memory, processes).
-
-## 💻 `/dev`  
-- Device files (`/dev/sda`, `/dev/null`).
-
----
-
-## 🧪 `/tmp`  
-- Temporary files; cleared on reboot.
-
-## 📁 `/mnt`  
-- Temporary mount point (e.g., for admin).
-
-## 💿 `/media`  
-- Auto-mounted external drives (USB, DVD).
-
-## 📦 `/opt`  
-- Optional third-party software.
-
-## 🚀 `/boot`  
-- Kernel and bootloader files.
-
-## 🔄 `/run`  
-- Runtime data (PID files, sockets); resets on reboot.
+| Directory       | Purpose                           | Examples                          |
+|-----------------|-----------------------------------|-----------------------------------|
+| `/bin`          | Essential commands for all users  | `ls`, `cp`, `mv`, `bash`          |
+| `/sbin`         | System administration commands    | `fdisk`, `mkfs`, `reboot`         |
+| `/lib`, `/lib64`| Shared libraries                  | Libraries needed by `/bin`, `/sbin` |
+| `/usr`          | User programs and data            | Applications, documentation       |
+| `/usr/bin`      | Non-essential user commands       | `git`, `firefox`, `vim`           |
+| `/usr/sbin`     | Non-essential admin commands      | `useradd`, `groupadd`             |
 
 ---
 
-## 📑 Summary Table
+## 📝 System Configuration & Data
 
-| Directory | Purpose                       |
-|-----------|-------------------------------|
-| `/`       | Root of the system            |
-| `/home`   | User files                    |
-| `/root`   | Admin home                    |
-| `/bin`    | Basic commands                |
-| `/sbin`   | System commands               |
-| `/usr`    | User software                 |
-| `/lib`    | Libraries                     |
-| `/etc`    | Config files                  |
-| `/var`    | Logs, cache, spool            |
-| `/proc`   | Kernel & process info         |
-| `/dev`    | Devices                       |
-| `/tmp`    | Temporary files               |
-| `/mnt`    | Manual mounts                 |
-| `/media`  | Auto mounts (USB, etc.)       |
-| `/opt`    | Optional software             |
-| `/boot`   | Bootloader & kernel           |
-| `/run`    | Runtime data                  |
+| Directory     | Purpose                           | Examples                              |
+|---------------|-----------------------------------|---------------------------------------|
+| `/etc`        | System configuration files        | `/etc/passwd`, `/etc/fstab`           |
+| `/var`        | Variable data files               | Logs, mail spools, caches             |
+| `/var/log`    | System log files                  | `/var/log/messages`, `/var/log/syslog`|
+| `/proc`       | Virtual filesystem for kernel     | Process information, system stats     |
+| `/sys`        | Virtual filesystem for hardware   | Hardware information, driver control  |
+| `/dev`        | Device files                      | `/dev/sda`, `/dev/null`, `/dev/tty`   |
 
 ---
 
-# 🧰 Basic Linux Commands (Quick Revision)
+## 🧪 Special Purpose Directories
 
-Essential commands for navigating and managing the Linux system.
-
----
-
-## 👤 User & Session
-
-| Command            | Description                                 |
-|--------------------|---------------------------------------------|
-| `id`               | Show current user ID and group info         |
-| `id username`      | Show ID info for a specific user            |
-| `su -`             | Switch to root user (with login environment)|
-| `exit`             | Exit the current shell/user session         |
+| Directory     | Purpose                           | Examples                              |
+|---------------|-----------------------------------|---------------------------------------|
+| `/tmp`        | Temporary files                   | Cleared on reboot                     |
+| `/boot`       | Boot loader files                 | Kernel, initramfs, GRUB configuration |
+| `/mnt`        | Mount point for filesystems       | Manual mount point for admin use      |
+| `/media`      | Mount point for removable media   | USB drives, CD-ROMs                   |
+| `/opt`        | Optional application software     | Third-party applications              |
+| `/run`        | Runtime variable data             | PID files, socket files               |
 
 ---
 
-## 💿 CD-ROM Control
+# 🧰 Essential Linux Commands
 
-| Command       | Description                          |
-|---------------|--------------------------------------|
-| `eject`       | Eject the CD-ROM tray                |
-| `eject -t`    | Close the CD-ROM tray                |
+## 👤 User & Session Management
+
+| Command              | Description                                     | Example                         |
+|----------------------|-------------------------------------------------|---------------------------------|
+| `whoami`             | Display current username                        | `whoami`                        |
+| `id`                 | Show user ID and group memberships              | `id`, `id username`             |
+| `su`                 | Switch user                                     | `su john`, `su -` (for root)    |
+| `sudo`               | Execute command as another user                 | `sudo dnf update`               |
+| `passwd`             | Change password                                 | `passwd`, `sudo passwd user`    |
+| `exit`               | Exit current shell/session                      | `exit`                          |
+| `logout`             | Log out of current session                      | `logout`                        |
 
 ---
 
 ## 📂 File & Directory Navigation
 
-| Command            | Description                                     |
+| Command              | Description                                     | Example                         |
+|----------------------|-------------------------------------------------|---------------------------------|
+| `pwd`                | Print working directory                         | `pwd`                           |
+| `cd`                 | Change directory                                | `cd /etc`, `cd ~`, `cd ..`      |
+| `ls`                 | List directory contents                         | `ls -la`, `ls /var`             |
+| `ls -l`              | Long listing with details                       | `ls -l /etc/passwd`             |
+| `ls -a`              | Show all files including hidden                 | `ls -a ~`                       |
+| `ls -lh`             | Human-readable file sizes                       | `ls -lh /var/log`               |
+| `ls -R`              | Recursive listing                               | `ls -R /etc/ssh`                |
+| `tree`               | Display directory tree                          | `tree`, `tree -L 2`             |
+| `find`               | Search for files                                | `find /home -name "*.txt"`      |
+
+---
+
+## 📄 File Operations
+
+| Command              | Description                                     | Example                          |
+|----------------------|-------------------------------------------------|----------------------------------|
+| `cat`                | Display file content                            | `cat /etc/hosts`                 |
+| `less`               | View file with pagination                       | `less /var/log/messages`         |
+| `head`               | Show first lines of file                        | `head -n 10 file.txt`            |
+| `tail`               | Show last lines of file                         | `tail -f /var/log/syslog`        |
+| `touch`              | Create empty file or update timestamp           | `touch newfile.txt`              |
+| `mkdir`              | Create directory                                | `mkdir -p dir1/dir2`             |
+| `cp`                 | Copy files or directories                       | `cp -r source/ dest/`            |
+| `mv`                 | Move or rename files                            | `mv oldname newname`             |
+| `rm`                 | Remove files or directories                     | `rm -rf directory/`              |
+| `rmdir`              | Remove empty directories                        | `rmdir emptydir`                 |
+| `chmod`              | Change file permissions                         | `chmod 755 script.sh`            |
+| `chown`              | Change file owner                               | `chown user:group file`          |
+
+---
+
+## 💿 System Information & Control
+
+| Command              | Description                                     | Example                          |
+|----------------------|-------------------------------------------------|----------------------------------|
+| `uname -a`           | Show system information                         | `uname -a`                       |
+| `hostname`           | Show or set system hostname                     | `hostname`                       |
+| `df -h`              | Show disk usage                                 | `df -h`                          |
+| `free -h`            | Display memory usage                            | `free -h`                        |
+| `top`                | Dynamic process viewer                          | `top`                            |
+| `htop`               | Enhanced process viewer                         | `htop`                           |
+| `ps aux`             | List all running processes                      | `ps aux | grep firefox`          |
+| `systemctl`          | Control systemd services                        | `systemctl status sshd`          |
+| `journalctl`         | Query systemd journal                           | `journalctl -u sshd`             |
+| `reboot`             | Restart system                                  | `sudo reboot`                    |
+| `shutdown`           | Shutdown system                                 | `sudo shutdown -h now`           |
+| `eject`              | Eject removable media                           | `eject`, `eject -t`              |
+
+---
+
+## 🧭 Text Processing
+
+| Command              | Description                                     | Example                          |
+|----------------------|-------------------------------------------------|----------------------------------|
+| `grep`               | Search text patterns                            | `grep "error" /var/log/syslog`   |
+| `sed`                | Stream editor for text manipulation             | `sed 's/old/new/g' file.txt`     |
+| `awk`                | Text processing language                        | `awk '{print $1}' file.txt`      |
+| `sort`               | Sort lines in text files                        | `sort -n numbers.txt`            |
+| `uniq`               | Report or filter repeated lines                 | `sort file.txt | uniq`           |
+| `wc`                 | Count lines, words, and characters              | `wc -l file.txt`                 |
+
+---
+
+## ⌨️ Terminal Shortcuts
+
+| Shortcut           | Description                                     |
 |--------------------|-------------------------------------------------|
-| `ls`               | List files in current directory                 |
-| `ls /`             | List files in the root directory                |
-| `pwd`              | Show current working directory                  |
-| `cd`               | Change to home directory                        |
-| `cd -`             | Switch to previous directory                    |
-| `cd ~`             | Go to current user's home directory             |
-| `cd ~user`         | Go to another user's home directory             |
-| `cd ..`            | Move to parent directory                        |
-| `.`                | Refers to current directory                     |
-| `..`               | Refers to parent directory                      |
+| `Ctrl + A`         | Move cursor to beginning of line                |
+| `Ctrl + E`         | Move cursor to end of line                      |
+| `Ctrl + U`         | Delete from cursor to beginning of line         |
+| `Ctrl + K`         | Delete from cursor to end of line               |
+| `Ctrl + L`         | Clear terminal screen                           |
+| `Ctrl + C`         | Interrupt/kill current process                  |
+| `Ctrl + Z`         | Suspend current process                         |
+| `Ctrl + D`         | Exit shell or terminate input                   |
+| `Ctrl + R`         | Search command history                          |
+| `Tab`              | Auto-complete commands and filenames            |
+| `↑` / `↓`          | Navigate command history                        |
 
 ---
 
-## 📄 File Handling
+## 🔄 Command Chaining & Redirection
 
-| Command        | Description                                   |
-|----------------|-----------------------------------------------|
-| `cat`          | Display contents of a file                    |
-| `touch`        | Create a new empty file                       |
-
----
-
-## ✅ Tip
-- Use `man <command>` to learn more about any command.
----
-# 📁 File System Utilities 
-
-Common commands for creating, copying, moving, and deleting files and directories in Linux.
+| Operator            | Description                                     | Example                          |
+|---------------------|-------------------------------------------------|----------------------------------|
+| `command1 ; command2` | Run commands sequentially                     | `cd /tmp ; ls`                   |
+| `command1 && command2` | Run command2 only if command1 succeeds       | `mkdir dir && cd dir`            |
+| `command1 || command2` | Run command2 only if command1 fails          | `ping -c1 server || echo "down"` |
+| `command > file`    | Redirect output to file (overwrite)             | `ls > listing.txt`               |
+| `command >> file`   | Redirect output to file (append)                | `echo "text" >> log.txt`         |
+| `command < file`    | Read input from file                            | `sort < unsorted.txt`            |
+| `command1 | command2` | Pipe output of command1 to command2           | `cat file.txt | grep "error"`    |
 
 ---
 
-## 🌳 Directory Structure
+## 🧪 Process Management
 
-| Command      | Description                          |
-|--------------|--------------------------------------|
-| `tree`       | Display directory tree structure     |
-
----
-
-## 📂 Create Directories
-
-| Command                                | Description                                   |
-|----------------------------------------|-----------------------------------------------|
-| `mkdir dirname`                        | Create a directory named `dirname`            |
-| `mkdir dirname1 dirname2 dirname3`     | Create multiple directories at once           |
+| Command              | Description                                     | Example                          |
+|----------------------|-------------------------------------------------|----------------------------------|
+| `jobs`               | List background jobs                            | `jobs`                           |
+| `bg`                 | Resume suspended job in background              | `bg %1`                          |
+| `fg`                 | Bring background job to foreground              | `fg %1`                          |
+| `kill`               | Send signal to process                          | `kill -9 1234`                   |
+| `killall`            | Kill processes by name                          | `killall firefox`                |
+| `nohup`              | Run command immune to hangups                   | `nohup command &`                |
+| `nice`               | Run command with modified priority              | `nice -n 19 command`             |
 
 ---
 
-## 📄 Copy Files & Directories
+## ✅ Tips & Tricks
 
-| Command                              | Description                                             |
-|--------------------------------------|---------------------------------------------------------|
-| `cp file file2`                      | Copy `file` to `file2`                                  |
-| `cp file /tmp`                       | Copy `file` to `/tmp` directory                         |
-| `cp -r dir1 /dir2/`                  | Recursively copy `dir1` into `/dir2/`                   |
-| `cp -r dir/ /tmp/report`             | Recursively copy `dir/` into `/tmp/report`              |
-
----
-
-## 📦 Move or Rename
-
-| Command                              | Description                                             |
-|--------------------------------------|---------------------------------------------------------|
-| `mv work/ /var/`                     | Move `work/` directory to `/var/`                       |
-| `mv dir1 /tmp/newdir`                | Move `dir1` to `/tmp/newdir`                            |
-| `mv file newname_file`              | Rename `file` to `newname_file`                        |
-
----
-
-## 🗑️ Delete Files & Directories
-
-| Command               | Description                                      |
-|------------------------|--------------------------------------------------|
-| `rm file`              | Remove a file named `file`                       |
-| `rmdir dir2`           | Remove empty directory `dir2`                    |
-| `rm -r dir2`           | Remove `dir2` and its contents recursively       |
-| `rm -rf dir`           | Forcefully remove `dir` and everything inside    |
-
----
-
-## ✅ Tips
-
-- Use `-r` with `cp` and `rm` for recursive operations.
-- Add `-f` to `rm` to **force** deletion without prompts.
-- Always double-check paths before running `rm -rf`.
-
----
-
-# 📁 More Linux Commands 
-
-This section extends basic Linux commands with options for listing files, managing the terminal, and handling background processes.
-
----
-
-## 📄 File Listing with `ls`
-
-| Command        | Description                                      |
-|----------------|--------------------------------------------------|
-| `ls -l`        | Long format listing (details like permissions)   |
-| `ls -a`        | Show all files, including hidden (`.` dotfiles)  |
-| `ls -R`        | List directories and subdirectories recursively  |
-| `ls -r`        | List files in reverse order                      |
-
----
-
-## 🧼 Terminal Management
-
-| Command        | Description                          |
-|----------------|--------------------------------------|
-| `clear`        | Clears the terminal screen           |
-| `reset`        | Resets terminal to default state     |
-
----
-
-## 🧠 Process Control
-
-| Command | Description                                      |
-|---------|--------------------------------------------------|
-| `bg`    | Resume a suspended process in the background     |
-
----
-
-## ✅ Tip
-
-- Use `ls -la` to combine long listing with hidden files.
-- Use `jobs`, `fg`, and `bg` to manage foreground/background tasks.
-
----
-# ⌨️ Linux Shortcuts & System Commands 
-
-Useful keyboard shortcuts and system power commands to streamline terminal usage and manage the system.
-
----
-
-## 🧭 Cursor Movement & Text Editing
-
-| Shortcut     | Description                                            |
-|--------------|--------------------------------------------------------|
-| `Ctrl + A`   | Move cursor to the **beginning** of the line           |
-| `Ctrl + E`   | Move cursor to the **end** of the line                 |
-| `Ctrl + K`   | Delete from cursor to the **end** of the line          |
-| `Ctrl + U`   | Delete from cursor to the **beginning** of the line    |
-| `Ctrl + Y`   | **Paste** text cut by `Ctrl + K` or `Ctrl + U`         |
-
----
-
-## 🖥️ Terminal & Process Control
-
-| Shortcut     | Description                                            |
-|--------------|--------------------------------------------------------|
-| `Ctrl + D`   | Logout / exit shell, or delete character under cursor  |
-| `Ctrl + L`   | Clear the terminal screen                              |
-| `Ctrl + C`   | Cancel the current command                             |
-| `Ctrl + Z`   | Suspend the current foreground process                 |
-| `Ctrl + S`   | Pause terminal output (XOFF)                           |
-| `Ctrl + Q`   | Resume terminal output (XON)                           |
-
----
-
-## 🔄 Reboot & Shutdown Commands
-
-| Command                | Description                          |
-|------------------------|--------------------------------------|
-| `reboot`               | Restart the system                   |
-| `shutdown -r now`      | Shutdown and restart immediately     |
-| `systemctl reboot`     | Reboot using systemd                 |
-| `init 6`               | Reboot via runlevel change           |
-| `shutdown -h now`      | Shutdown immediately                 |
-| `systemctl shutdown`   | Shutdown using systemd               |
-| `init 0`               | Halt the system                      |
-
----
-
-## 🧪 Command Chaining
-
-| Command         | Description                                       |
-|------------------|--------------------------------------------------|
-| `ls; date`       | Run `ls` and then `date` in sequence             |
-
----
-
-## ✅ Tip
-
-- Combine shortcuts with command history (`↑`, `↓`) for faster navigation.
-- Use `man shutdown` or `man systemctl` for more options.
+- Add `-i` to `rm`, `mv`, and `cp` for interactive mode (ask before overwriting)
+- Use `sudo !!` to repeat the previous command with sudo
+- `cd -` switches to the previous directory
+- Use wildcards (`*`, `?`) with caution in `rm` commands
+- Always backup important data before major system changes
+- For detailed help on any command: `man command` or `command --help`
 
 ---
