@@ -59,7 +59,7 @@ To return to the GNOME GUI session (usually on TTY2):
   sudo reboot
   ```
 
-# 📁 Linux Filesystem Overview (Quick Revision)
+# 📁 Linux Filesystem Overview 
 
 This is a quick reference to the main Linux filesystem directories and their purposes.
 
@@ -206,5 +206,67 @@ Essential commands for navigating and managing the Linux system.
 
 ## ✅ Tip
 - Use `man <command>` to learn more about any command.
+---
+# 📁 File System Utilities 
+
+Common commands for creating, copying, moving, and deleting files and directories in Linux.
+
+---
+
+## 🌳 Directory Structure
+
+| Command      | Description                          |
+|--------------|--------------------------------------|
+| `tree`       | Display directory tree structure     |
+
+---
+
+## 📂 Create Directories
+
+| Command                                | Description                                   |
+|----------------------------------------|-----------------------------------------------|
+| `mkdir dirname`                        | Create a directory named `dirname`            |
+| `mkdir dirname1 dirname2 dirname3`     | Create multiple directories at once           |
+
+---
+
+## 📄 Copy Files & Directories
+
+| Command                              | Description                                             |
+|--------------------------------------|---------------------------------------------------------|
+| `cp file file2`                      | Copy `file` to `file2`                                  |
+| `cp file /tmp`                       | Copy `file` to `/tmp` directory                         |
+| `cp -r dir1 /dir2/`                  | Recursively copy `dir1` into `/dir2/`                   |
+| `cp -r dir/ /tmp/report`             | Recursively copy `dir/` into `/tmp/report`              |
+
+---
+
+## 📦 Move or Rename
+
+| Command                              | Description                                             |
+|--------------------------------------|---------------------------------------------------------|
+| `mv work/ /var/`                     | Move `work/` directory to `/var/`                       |
+| `mv dir1 /tmp/newdir`                | Move `dir1` to `/tmp/newdir`                            |
+| `mv file newname_file`              | Rename `file` to `newname_file`                        |
+
+---
+
+## 🗑️ Delete Files & Directories
+
+| Command               | Description                                      |
+|------------------------|--------------------------------------------------|
+| `rm file`              | Remove a file named `file`                       |
+| `rmdir dir2`           | Remove empty directory `dir2`                    |
+| `rm -r dir2`           | Remove `dir2` and its contents recursively       |
+| `rm -rf dir`           | Forcefully remove `dir` and everything inside    |
+
+---
+
+## ✅ Tips
+
+- Use `-r` with `cp` and `rm` for recursive operations.
+- Add `-f` to `rm` to **force** deletion without prompts.
+- Always double-check paths before running `rm -rf`.
+
 ---
 
