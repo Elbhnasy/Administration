@@ -152,8 +152,59 @@ This is a quick reference to the main Linux filesystem directories and their pur
 
 ---
 
-## 📚 Tip
+# 🧰 Basic Linux Commands (Quick Revision)
 
-Use `man hier` in the terminal for the official directory structure guide.
+Essential commands for navigating and managing the Linux system.
 
 ---
+
+## 👤 User & Session
+
+| Command            | Description                                 |
+|--------------------|---------------------------------------------|
+| `id`               | Show current user ID and group info         |
+| `id username`      | Show ID info for a specific user            |
+| `su -`             | Switch to root user (with login environment)|
+| `exit`             | Exit the current shell/user session         |
+
+---
+
+## 💿 CD-ROM Control
+
+| Command       | Description                          |
+|---------------|--------------------------------------|
+| `eject`       | Eject the CD-ROM tray                |
+| `eject -t`    | Close the CD-ROM tray                |
+
+---
+
+## 📂 File & Directory Navigation
+
+| Command            | Description                                     |
+|--------------------|-------------------------------------------------|
+| `ls`               | List files in current directory                 |
+| `ls /`             | List files in the root directory                |
+| `pwd`              | Show current working directory                  |
+| `cd`               | Change to home directory                        |
+| `cd -`             | Switch to previous directory                    |
+| `cd ~`             | Go to current user's home directory             |
+| `cd ~user`         | Go to another user's home directory             |
+| `cd ..`            | Move to parent directory                        |
+| `.`                | Refers to current directory                     |
+| `..`               | Refers to parent directory                      |
+
+---
+
+## 📄 File Handling
+
+| Command        | Description                                   |
+|----------------|-----------------------------------------------|
+| `cat`          | Display contents of a file                    |
+| `touch`        | Create a new empty file                       |
+
+---
+
+## ✅ Tip
+- Use `man <command>` to learn more about any command.
+---
+
