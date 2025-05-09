@@ -13,6 +13,10 @@
 - [Linux Filesystem Hierarchy](#-linux-filesystem-hierarchy)
 - [Essential Linux Commands](#-essential-linux-commands)
 - [User, Group & Permission Management](#-linux-user-group-and-permission-management)
+- [Linux Redirection & Piping](#-linux-redirection--piping)
+- [File Viewing & Command Search](#-file-viewing--command-search)
+- [Partitioning & Mounting](#-partitioning--mounting)
+
 
 ---
 
@@ -436,3 +440,308 @@ chmod 700 sensitive-script.sh
 
 ---
 
+# 🔁 Linux Redirection & Piping
+
+Control where command input and output go—whether it's to files, other commands, or discarded entirely.
+
+## Understanding I/O Streams
+
+Every command has three standard streams:
+- **stdin (0)**: Standard input - where the command reads its input
+- **stdout (1)**: Standard output - where successful command results are written
+- **stderr (2)**: Standard error - where error messages are written
+
+## 📤 Output Redirection
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `command > file` | Redirect **stdout** to file (overwrite) | `ls > filelist.txt` |
+| `command >> file` | Redirect **stdout** to file (append) | `echo "new line" >> notes.txt` |
+| `command 2> file` | Redirect **stderr** to file (overwrite) | `find / -name abc 2> errors.log` |
+| `command 2>> file` | Redirect **stderr** to file (append) | `gcc program.c 2>> compile_errors.log` |
+| `command > file 2>&1` | Redirect **both stdout and stderr** to same file | `ls -la /root > output.txt 2>&1` |
+| `command &> file` | Redirect both streams (shorthand, overwrite) | `find / -name "*.conf" &> results.txt` |
+| `command &>> file` | Redirect both streams (shorthand, append) | `make &>> build.log` |
+
+## 📥 Input Redirection
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `command < file` | Use file as **stdin** for command | `sort < unsorted.txt` |
+| `command << MARKER` | Use here-document (multi-line input) | `cat << EOF > script.sh` |
+| `command <<< "string"` | Use here-string (single string input) | `grep "user" <<< "username: admin"` |
+
+## 🔗 Pipes
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `cmd1 \| cmd2` | Send output of cmd1 to input of cmd2 | `ls -la \| grep ".txt"` |
+| `cmd1 \| tee file \| cmd2` | Send output to both file and cmd2 | `ls \| tee files.txt \| grep ".log"` |
+| `cmd1 \|& cmd2` | Pipe both stdout and stderr | `find / -type f -name "*.conf" \|& grep -v "Permission denied"` |
+
+## 🗑️ Discard Output
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `command > /dev/null` | Discard standard output | `apt update > /dev/null` |
+| `command 2> /dev/null` | Discard standard error | `find / -name core 2> /dev/null` |
+| `command &> /dev/null` | Discard both stdout and stderr | `wget https://example.com &> /dev/null` |
+
+## 📄 File Content Redirection
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `cat file1 > file2` | Copy content from file1 to file2 (overwrite) | `cat source.txt > destination.txt` |
+| `cat file1 >> file2` | Append contents of file1 to file2 | `cat header.txt >> document.txt` |
+| `cat < file1 > file2` | Redirect file1 contents to file2 | `cat < input.txt > output.txt` |
+
+### Here Document Example
+
+```bash
+# Create a script with multi-line content
+cat << 'EOT' > myscript.sh
+#!/bin/bash
+echo "This is a generated script"
+echo "Created on $(date)"
+ls -la
+EOT
+
+# Add content to a configuration file
+sudo tee -a /etc/hosts << EOF
+192.168.1.10  server1
+192.168.1.11  server2
+EOF
+```
+
+## 💡 Pro Tips
+
+1. Use `tee` to view output while saving to a file:
+   ```bash
+   command | tee output.txt
+   ```
+
+2. Use process substitution for complex commands:
+   ```bash
+   diff <(ls dir1) <(ls dir2)
+   ```
+
+3. Combine redirections for detailed logs:
+   ```bash
+   command > output.log 2> error.log
+   ```
+
+4. Redirect and append to same file without clobbering:
+   ```bash
+   command >> logfile.txt 2>> logfile.txt
+   ```
+
+5. Remember the file descriptor numbers:
+   - **0**: stdin
+   - **1**: stdout
+   - **2**: stderr
+
+---
+
+# 📑 File Viewing & Command Search
+
+Commands for viewing file contents, managing output, and retrieving system/command information.
+
+## 📄 File Viewing & Output
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `cat file` | Display entire file content | `cat /etc/hostname` |
+| `less file` | View file with pagination & search | `less /var/log/syslog` |
+| `more file` | View file one screen at a time | `more README.md` |
+| `head file` | View first 10 lines of file | `head -n 20 large_file.txt` |
+| `tail file` | View last 10 lines of file | `tail -f /var/log/auth.log` |
+| `file filename` | Identify file type | `file unknown_file` |
+| `tee file` | Read from stdin, write to stdout & file | `ls -la | tee listing.txt` |
+
+### 📊 less Navigation Keys
+
+| Key | Action |
+|:----|:-------|
+| `Space` or `Page Down` | Forward one page |
+| `b` or `Page Up` | Back one page |
+| `/pattern` | Search forward for "pattern" |
+| `?pattern` | Search backward for "pattern" |
+| `n` | Next search match |
+| `N` | Previous search match |
+| `q` | Quit |
+| `g` | Go to first line |
+| `G` | Go to last line |
+
+## 🔍 Command & User Information
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `w` | Show logged-in users and activity | `w` |
+| `who` | List currently logged-in users | `who -a` |
+| `whoami` | Show current username | `whoami` |
+| `id` | Show user identity and groups | `id username` |
+| `which command` | Show path of executable | `which python` |
+| `whatis command` | Brief description of command | `whatis grep` |
+| `whereis command` | Locate binary, source, manual | `whereis bash` |
+| `last` | Show login history & reboots | `last -10` |
+| `lastlog` | Last login time for all users | `lastlog | grep -v "Never"` |
+| `type command` | Show how command would be interpreted | `type ls` |
+
+## 📖 Help & Documentation
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `man command` | Display manual page | `man find` |
+| `info command` | Show GNU info documentation | `info coreutils` |
+| `command --help` | Brief command help | `grep --help` |
+| `apropos keyword` | Search man pages for keyword | `apropos partition` |
+
+## 💡 Pro Tips
+
+1. Live-monitor logs with tail:
+   ```bash
+   tail -f /var/log/syslog
+   ```
+
+2. Use less with syntax highlighting for code:
+   ```bash
+   less -R file.py   # When used with syntax highlighters
+   ```
+
+3. Combine multiple commands to find information:
+   ```bash
+   ps aux | grep httpd | less
+   ```
+
+4. Search through command history:
+   ```bash
+   history | grep "apt install"
+   ```
+
+5. View only specific parts of a file with sed:
+   ```bash
+   sed -n '10,20p' file.txt | less
+   ```
+
+---
+
+# 💽 Partitioning & Mounting
+
+Commands for managing disk partitions, filesystems, and mounting in Linux systems.
+
+## 📊 Disk Usage & Space
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `df` | Show filesystem disk space usage | `df -h` (human-readable) |
+| `df -i` | Show inode usage | `df -i /home` |
+| `du` | Show directory space usage | `du -sh /var` |
+| `lsblk` | List block devices | `lsblk -f` (with filesystems) |
+| `ls -li` | List files with inode numbers | `ls -li /etc/hosts` |
+| `stat file` | Display detailed file status | `stat /etc/passwd` |
+
+## 🔗 File Links
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `ln file linkname` | Create hard link | `ln /etc/hosts hosts.hard` |
+| `ln -s file linkname` | Create symbolic (soft) link | `ln -s /var/log/syslog current_log` |
+| `readlink symlink` | Show target of symbolic link | `readlink /usr/bin/python` |
+| `find -type l` | Find symbolic links | `find /usr -type l -name "*.so"` |
+
+## 🔍 Disk & Partition Management
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `fdisk -l` | List partition tables | `sudo fdisk -l /dev/sda` |
+| `parted -l` | List partitions (alternative) | `sudo parted -l` |
+| `gdisk -l` | GPT partition listing | `sudo gdisk -l /dev/nvme0n1` |
+| `blkid` | List block device attributes | `sudo blkid` |
+| `partprobe` | Inform OS of partition changes | `sudo partprobe /dev/sda` |
+
+### 🧰 Partition Creation & Editing
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `fdisk /dev/sdX` | Create/modify MBR partitions | `sudo fdisk /dev/sdb` |
+| `gdisk /dev/sdX` | Create/modify GPT partitions | `sudo gdisk /dev/sdc` |
+| `parted /dev/sdX` | GNU Parted partition editor | `sudo parted /dev/sdb` |
+| `cfdisk /dev/sdX` | Curses-based fdisk | `sudo cfdisk /dev/sdb` |
+
+## 🧱 Filesystem Operations
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `mkfs.ext4 /dev/sdXn` | Create ext4 filesystem | `sudo mkfs.ext4 /dev/sdb1` |
+| `mkfs.xfs /dev/sdXn` | Create XFS filesystem | `sudo mkfs.xfs /dev/sdc1` |
+| `mkswap /dev/sdXn` | Create swap area | `sudo mkswap /dev/sdb2` |
+| `swapon /dev/sdXn` | Enable swap | `sudo swapon /dev/sdb2` |
+| `swapoff /dev/sdXn` | Disable swap | `sudo swapoff /dev/sdb2` |
+
+### 🔧 Filesystem Tools
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `e2fsck /dev/sdXn` | Check ext2/3/4 filesystem | `sudo e2fsck -f /dev/sdb1` |
+| `xfs_repair /dev/sdXn` | Repair XFS filesystem | `sudo xfs_repair /dev/sdc1` |
+| `dumpe2fs /dev/sdXn` | Display ext filesystem info | `sudo dumpe2fs /dev/sdb1` |
+| `tune2fs /dev/sdXn` | Adjust ext filesystem parameters | `sudo tune2fs -l /dev/sdb1` |
+| `resize2fs /dev/sdXn` | Resize ext filesystem | `sudo resize2fs /dev/sdb1` |
+
+## 🔗 Mounting & Unmounting
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `mount /dev/sdXn /mnt/point` | Mount filesystem | `sudo mount /dev/sdb1 /mnt/data` |
+| `mount -o options /dev/sdXn /mnt` | Mount with options | `sudo mount -o ro /dev/sdb1 /mnt` |
+| `umount /mnt/point` | Unmount by mountpoint | `sudo umount /mnt/data` |
+| `umount /dev/sdXn` | Unmount by device | `sudo umount /dev/sdb1` |
+| `mount -a` | Mount all from fstab | `sudo mount -a` |
+| `fuser -m /mnt/point` | Show processes using mount | `sudo fuser -mv /mnt/data` |
+
+### 📄 /etc/fstab Configuration
+
+```
+# Device       Mount Point     Filesystem  Options          Dump  Pass
+/dev/sda1      /              ext4        defaults         0     1
+/dev/sda2      /home          ext4        defaults         0     2
+UUID=1234-5678 /data          xfs         defaults         0     2
+```
+
+## 📡 Remote Filesystems
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `mount -t nfs server:/share /mnt` | Mount NFS share | `sudo mount -t nfs 192.168.1.10:/exports /mnt/nfs` |
+| `mount -t cifs //server/share /mnt` | Mount SMB/CIFS share | `sudo mount -t cifs //server/docs /mnt/docs -o user=name` |
+| `sshfs user@host:/path /mnt` | Mount via SSHFS | `sshfs admin@server:/var/log /mnt/logs` |
+
+## 💡 Pro Tips
+
+1. Create filesystem with label:
+   ```bash
+   sudo mkfs.ext4 -L datastore /dev/sdb1
+   ```
+
+2. Mount by label or UUID (more reliable):
+   ```bash
+   sudo mount UUID=1234-5678-90ab-cdef /mnt/data
+   sudo mount LABEL=datastore /mnt/data
+   ```
+
+3. See what's mounted with custom format:
+   ```bash
+   mount | column -t
+   ```
+
+4. Find out which process is using a mounted filesystem:
+   ```bash
+   sudo lsof +f -- /mnt/data
+   ```
+
+5. Make mounting easier with entries in /etc/fstab:
+   ```
+   UUID=abcd-1234 /mnt/data ext4 defaults,noatime 0 2
+   ```
+
+---
