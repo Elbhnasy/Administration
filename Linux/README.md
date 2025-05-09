@@ -270,3 +270,43 @@ Common commands for creating, copying, moving, and deleting files and directorie
 
 ---
 
+# 📁 More Linux Commands 
+
+This section extends basic Linux commands with options for listing files, managing the terminal, and handling background processes.
+
+---
+
+## 📄 File Listing with `ls`
+
+| Command        | Description                                      |
+|----------------|--------------------------------------------------|
+| `ls -l`        | Long format listing (details like permissions)   |
+| `ls -a`        | Show all files, including hidden (`.` dotfiles)  |
+| `ls -R`        | List directories and subdirectories recursively  |
+| `ls -r`        | List files in reverse order                      |
+
+---
+
+## 🧼 Terminal Management
+
+| Command        | Description                          |
+|----------------|--------------------------------------|
+| `clear`        | Clears the terminal screen           |
+| `reset`        | Resets terminal to default state     |
+
+---
+
+## 🧠 Process Control
+
+| Command | Description                                      |
+|---------|--------------------------------------------------|
+| `bg`    | Resume a suspended process in the background     |
+
+---
+
+## ✅ Tip
+
+- Use `ls -la` to combine long listing with hidden files.
+- Use `jobs`, `fg`, and `bg` to manage foreground/background tasks.
+
+---
