@@ -579,20 +579,6 @@ Commands for managing disk partitions, filesystems, and mounting in Linux system
 | `lsblk` | List block devices | `lsblk -f` (with filesystems) | **L**i**s**t **b**loc**k** devices |
 | `ls -li` | List files with inode numbers | `
 
-# 💽 Partitioning & Mounting
-
-Commands for managing disk partitions, filesystems, and mounting in Linux systems.
-
-## 📊 Disk Usage & Space
-
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `df` | Show filesystem disk space usage | `df -h` (human-readable) |
-| `df -i` | Show inode usage | `df -i /home` |
-| `du` | Show directory space usage | `du -sh /var` |
-| `lsblk` | List block devices | `lsblk -f` (with filesystems) |
-| `ls -li` | List files with inode numbers | `ls -li /etc/hosts` |
-| `stat file` | Display detailed file status | `stat /etc/passwd` |
 
 ## 🔗 File Links
 
