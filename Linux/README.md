@@ -1,4 +1,4 @@
-# 🐧 RHEL 9 & Linux Essentials - Complete Revision Guide
+# 🐧 RHEL 9 & Linux Essentials - Enhanced Revision Guide
 
 <div align="center">
   
@@ -8,7 +8,7 @@
   
 </div>
 
-## 📚 Table of Contents
+## 📋 Quick Reference Contents
 - [TTY in Red Hat Enterprise Linux 9](#-tty-in-red-hat-enterprise-linux-9)
 - [Linux Filesystem Hierarchy](#-linux-filesystem-hierarchy)
 - [Essential Linux Commands](#-essential-linux-commands)
@@ -16,7 +16,6 @@
 - [Linux Redirection & Piping](#-linux-redirection--piping)
 - [File Viewing & Command Search](#-file-viewing--command-search)
 - [Partitioning & Mounting](#-partitioning--mounting)
-
 
 ---
 
@@ -33,10 +32,12 @@
 
 ## Purpose of TTY
 
-- ⚠️ **Fallback interface** when GUI crashes
-- 🔧 **Low-level system access** for maintenance
-- 👥 **Multi-user sessions** capability
-- 📊 **Diagnostics** without graphical overhead
+| Purpose | Description |
+|:--------|:------------|
+| ⚠️ **Fallback interface** | When GUI crashes or is unavailable |
+| 🔧 **Low-level access** | Direct system maintenance without GUI overhead |
+| 👥 **Multi-user sessions** | Multiple simultaneous login sessions |
+| 📊 **Diagnostics** | Troubleshooting when graphical environment fails |
 
 ## Accessing TTY
 
@@ -91,12 +92,14 @@ sudo dnf install kernel-devel gcc
 
 | Directory | Purpose | Contains |
 |:----------|:--------|:---------|
-| `/bin` | Essential commands | `ls`, `cp`, `mv`, `bash` |
-| `/sbin` | System admin commands | `fdisk`, `mkfs`, `reboot` |
-| `/lib`, `/lib64` | Shared libraries | Libraries for `/bin` & `/sbin` |
+| `/bin` → `/usr/bin` | Essential commands | `ls`, `cp`, `mv`, `bash` |
+| `/sbin` → `/usr/sbin` | System admin commands | `fdisk`, `mkfs`, `reboot` |
+| `/lib`, `/lib64` → `/usr/lib` | Shared libraries | Libraries for `/bin` & `/sbin` |
 | `/usr` | User programs | Applications, docs, most software |
 | `/usr/bin` | Non-essential commands | `git`, `firefox`, `vim` |
 | `/usr/sbin` | Admin commands | `useradd`, `groupadd` |
+
+> 💡 **Pro Tip:** In RHEL 9, many traditional directories are now symbolic links to locations under `/usr`
 
 ## System Configuration & Data
 
@@ -126,113 +129,90 @@ sudo dnf install kernel-devel gcc
 
 ## User & Session Management
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `whoami` | Show current username | `whoami` |
-| `id` | Display user & group IDs | `id`, `id username` |
-| `su` | Switch user | `su john`, `su -` (for root) |
-| `sudo` | Execute as another user | `sudo dnf update` |
-| `passwd` | Change password | `passwd`, `sudo passwd user` |
-| `exit` | Exit current shell | `exit` |
-| `logout` | Log out of session | `logout` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `whoami` | Show current username | `whoami` | Who am I logged in as? |
+| `id` | Display user & group IDs | `id`, `id username` | What are my privileges? |
+| `su` | Switch user | `su john`, `su -` (for root) | `-` loads full environment |
+| `sudo` | Execute as another user | `sudo dnf update` | Super-user do |
+| `passwd` | Change password | `passwd`, `sudo passwd user` | Password management |
+| `exit` | Exit current shell | `exit` | Leave current session |
+| `logout` | Log out of session | `logout` | Exit login shell |
 
 ## File & Directory Navigation
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `pwd` | Print working directory | `pwd` |
-| `cd` | Change directory | `cd /etc`, `cd ~`, `cd ..` |
-| `ls` | List directory contents | `ls -la`, `ls /var` |
-| `ls -l` | Long listing with details | `ls -l /etc/passwd` |
-| `ls -a` | Show all files (inc. hidden) | `ls -a ~` |
-| `ls -lh` | Human-readable sizes | `ls -lh /var/log` |
-| `ls -R` | Recursive listing | `ls -R /etc/ssh` |
-| `tree` | Display directory tree | `tree`, `tree -L 2` |
-| `find` | Search for files | `find /home -name "*.txt"` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `pwd` | Print working directory | `pwd` | Where am I now? |
+| `cd` | Change directory | `cd /etc`, `cd ~`, `cd ..` | Move around filesystem |
+| `ls` | List directory contents | `ls -la`, `ls /var` | Show what's here |
+| `ls -l` | Long listing with details | `ls -l /etc/passwd` | Detailed view |
+| `ls -a` | Show all files (inc. hidden) | `ls -a ~` | Including hidden files |
+| `ls -lh` | Human-readable sizes | `ls -lh /var/log` | Readable file sizes |
+| `ls -R` | Recursive listing | `ls -R /etc/ssh` | Show subdirectories too |
+| `tree` | Display directory tree | `tree`, `tree -L 2` | Visual directory structure |
+| `find` | Search for files | `find /home -name "*.txt"` | Locate files by criteria |
 
 ## File Operations
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `cat` | Display file content | `cat /etc/hosts` |
-| `less` | View file with pagination | `less /var/log/messages` |
-| `head` | Show first lines | `head -n 10 file.txt` |
-| `tail` | Show last lines | `tail -f /var/log/syslog` |
-| `touch` | Create empty file | `touch newfile.txt` |
-| `mkdir` | Create directory | `mkdir -p dir1/dir2` |
-| `cp` | Copy files/directories | `cp -r source/ dest/` |
-| `mv` | Move or rename files | `mv oldname newname` |
-| `rm` | Remove files/directories | `rm -rf directory/` ⚠️ |
-| `rmdir` | Remove empty directories | `rmdir emptydir` |
-| `chmod` | Change file permissions | `chmod 755 script.sh` |
-| `chown` | Change file owner | `chown user:group file` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `cat` | Display file content | `cat /etc/hosts` | Con**cat**enate & display |
+| `less` | View file with pagination | `less /var/log/messages` | Page through large files |
+| `head` | Show first lines | `head -n 10 file.txt` | First 10 lines by default |
+| `tail` | Show last lines | `tail -f /var/log/syslog` | `-f` follows new entries |
+| `touch` | Create empty file | `touch newfile.txt` | Update timestamp/create file |
+| `mkdir` | Create directory | `mkdir -p dir1/dir2` | `-p` creates parent dirs |
+| `cp` | Copy files/directories | `cp -r source/ dest/` | `-r` copies recursively |
+| `mv` | Move or rename files | `mv oldname newname` | Move or rename |
+| `rm` | Remove files/directories | `rm -rf directory/` ⚠️ | **CAREFUL**: `-rf` deletes without confirmation |
+| `rmdir` | Remove empty directories | `rmdir emptydir` | Only works on empty dirs |
+| `chmod` | Change file permissions | `chmod 755 script.sh` | **Ch**ange **mod**e |
+| `chown` | Change file owner | `chown user:group file` | **Ch**ange **own**er |
 
 ## System Information & Control
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `uname -a` | System information | `uname -a` |
-| `hostname` | Show/set hostname | `hostname` |
-| `df -h` | Disk usage | `df -h` |
-| `free -h` | Memory usage | `free -h` |
-| `top` | Process viewer | `top` |
-| `htop` | Enhanced process viewer | `htop` |
-| `ps aux` | List processes | `ps aux | grep firefox` |
-| `systemctl` | Manage systemd services | `systemctl status sshd` |
-| `journalctl` | Query systemd journal | `journalctl -u sshd` |
-| `reboot` | Restart system | `sudo reboot` |
-| `shutdown` | Shutdown system | `sudo shutdown -h now` |
-
-## Text Processing
-
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `grep` | Search text patterns | `grep "error" /var/log/syslog` |
-| `sed` | Stream editor | `sed 's/old/new/g' file.txt` |
-| `awk` | Text processing language | `awk '{print $1}' file.txt` |
-| `sort` | Sort lines | `sort -n numbers.txt` |
-| `uniq` | Filter repeated lines | `sort file.txt \| uniq` |
-| `wc` | Count lines/words/chars | `wc -l file.txt` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `uname -a` | System information | `uname -a` | Show kernel version |
+| `hostname` | Show/set hostname | `hostname` | Computer's network name |
+| `df -h` | Disk usage | `df -h` | **D**isk **f**ree space |
+| `free -h` | Memory usage | `free -h` | RAM usage & availability |
+| `top` | Process viewer | `top` | Dynamic process list |
+| `htop` | Enhanced process viewer | `htop` | Better version of top |
+| `ps aux` | List processes | `ps aux \| grep firefox` | Process status |
+| `systemctl` | Manage systemd services | `systemctl status sshd` | Control system services |
+| `journalctl` | Query systemd journal | `journalctl -u sshd` | View service logs |
+| `reboot` | Restart system | `sudo reboot` | Restart computer |
+| `shutdown` | Shutdown system | `sudo shutdown -h now` | Turn off computer |
 
 ## Terminal Shortcuts
 
-| Shortcut | Action |
-|:---------|:-------|
-| `Ctrl + A` | Move to beginning of line |
-| `Ctrl + E` | Move to end of line |
-| `Ctrl + U` | Delete from cursor to start |
-| `Ctrl + K` | Delete from cursor to end |
-| `Ctrl + L` | Clear screen |
-| `Ctrl + C` | Kill current process |
-| `Ctrl + Z` | Suspend process |
-| `Ctrl + D` | Exit shell/terminate input |
-| `Ctrl + R` | Search command history |
-| `Tab` | Auto-complete |
-| `↑` / `↓` | Navigate history |
+| Shortcut | Action | Remember |
+|:---------|:-------|:---------|
+| `Ctrl + A` | Move to beginning of line | **A** = start of alphabet |
+| `Ctrl + E` | Move to end of line | **E** = end |
+| `Ctrl + U` | Delete from cursor to start | **U**p to start |
+| `Ctrl + K` | Delete from cursor to end | **K**ill to end |
+| `Ctrl + L` | Clear screen | **L** = clear |
+| `Ctrl + C` | Kill current process | **C**ancel |
+| `Ctrl + Z` | Suspend process | Put process to sleep/**Z**zz |
+| `Ctrl + D` | Exit shell/terminate input | **D**one/exit |
+| `Ctrl + R` | Search command history | **R**ecall history |
+| `Tab` | Auto-complete | Save typing |
+| `↑` / `↓` | Navigate history | Browse previous commands |
 
 ## Command Chaining & Redirection
 
-| Operator | Description | Example |
-|:---------|:------------|:--------|
-| `cmd1 ; cmd2` | Run sequentially | `cd /tmp ; ls` |
-| `cmd1 && cmd2` | Run cmd2 if cmd1 succeeds | `mkdir dir && cd dir` |
-| `cmd1 \|\| cmd2` | Run cmd2 if cmd1 fails | `ping -c1 server \|\| echo "down"` |
-| `cmd > file` | Redirect output (overwrite) | `ls > listing.txt` |
-| `cmd >> file` | Redirect output (append) | `echo "text" >> log.txt` |
-| `cmd < file` | Read input from file | `sort < unsorted.txt` |
-| `cmd1 \| cmd2` | Pipe output to next command | `cat file.txt \| grep "error"` |
-
-## Process Management
-
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `jobs` | List background jobs | `jobs` |
-| `bg` | Resume job in background | `bg %1` |
-| `fg` | Bring job to foreground | `fg %1` |
-| `kill` | Send signal to process | `kill -9 1234` |
-| `killall` | Kill processes by name | `killall firefox` |
-| `nohup` | Run immune to hangups | `nohup command &` |
-| `nice` | Run with modified priority | `nice -n 19 command` |
+| Operator | Description | Example | Remember |
+|:---------|:------------|:--------|:---------|
+| `cmd1 ; cmd2` | Run sequentially | `cd /tmp ; ls` | First, then second (always) |
+| `cmd1 && cmd2` | Run cmd2 if cmd1 succeeds | `mkdir dir && cd dir` | AND logic - both or nothing |
+| `cmd1 \|\| cmd2` | Run cmd2 if cmd1 fails | `ping -c1 server \|\| echo "down"` | OR logic - first or second |
+| `cmd > file` | Redirect output (overwrite) | `ls > listing.txt` | Overwrite file |
+| `cmd >> file` | Redirect output (append) | `echo "text" >> log.txt` | Append to file |
+| `cmd < file` | Read input from file | `sort < unsorted.txt` | File as input |
+| `cmd1 \| cmd2` | Pipe output to next command | `cat file.txt \| grep "error"` | Output becomes input |
 
 ## Power User Tips
 
@@ -250,67 +230,67 @@ sudo dnf install kernel-devel gcc
 
 ### Core Commands
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `useradd username` | Create user | `sudo useradd john` |
-| `useradd -m username` | Create with home dir | `sudo useradd -m sarah` |
-| `useradd -m -s /bin/bash user` | Create with login shell | `sudo useradd -m -s /bin/bash dave` |
-| `passwd username` | Set/change password | `sudo passwd mary` |
-| `usermod -L username` | Lock account | `sudo usermod -L temporaryuser` |
-| `usermod -U username` | Unlock account | `sudo usermod -U temporaryuser` |
-| `userdel username` | Delete account | `sudo userdel john` |
-| `userdel -r username` | Delete account & home | `sudo userdel -r sarah` |
-| `id username` | Show IDs & groups | `id john` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `useradd username` | Create user | `sudo useradd john` | Bare user creation |
+| `useradd -m username` | Create with home dir | `sudo useradd -m sarah` | `-m` = **m**ake home directory |
+| `useradd -m -s /bin/bash user` | Create with login shell | `sudo useradd -m -s /bin/bash dave` | `-s` = set **s**hell |
+| `passwd username` | Set/change password | `sudo passwd mary` | Always after user creation |
+| `usermod -L username` | Lock account | `sudo usermod -L temporaryuser` | `-L` = **L**ock |
+| `usermod -U username` | Unlock account | `sudo usermod -U temporaryuser` | `-U` = **U**nlock |
+| `userdel username` | Delete account | `sudo userdel john` | Keeps home directory |
+| `userdel -r username` | Delete account & home | `sudo userdel -r sarah` | `-r` = **r**emove files too |
+| `id username` | Show IDs & groups | `id john` | IDs and group memberships |
 
 ### User Information Files
 
-| File | Purpose | View Command |
-|:-----|:--------|:-------------|
-| `/etc/passwd` | User account info | `cat /etc/passwd` |
-| `/etc/shadow` | Encrypted passwords | `sudo cat /etc/shadow` |
-| `/etc/login.defs` | User creation defaults | `cat /etc/login.defs` |
-| `/etc/skel/` | New home dir templates | `ls -la /etc/skel` |
+| File | Purpose | View Command | Remember |
+|:-----|:--------|:-------------|:---------|
+| `/etc/passwd` | User account info | `cat /etc/passwd` | Core user database |
+| `/etc/shadow` | Encrypted passwords | `sudo cat /etc/shadow` | Secure password storage |
+| `/etc/login.defs` | User creation defaults | `cat /etc/login.defs` | System-wide user settings |
+| `/etc/skel/` | New home dir templates | `ls -la /etc/skel` | Template for new users |
 
 ## Group Management
 
 ### Core Commands
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `groupadd groupname` | Create group | `sudo groupadd developers` |
-| `groupmod -n newname oldname` | Rename group | `sudo groupmod -n devs developers` |
-| `groupdel groupname` | Delete group | `sudo groupdel obsoletegroup` |
-| `usermod -g group user` | Change primary group | `sudo usermod -g developers john` |
-| `usermod -a -G g1,g2 user` | Add to groups | `sudo usermod -a -G sudo,docker mary` |
-| `gpasswd -a user group` | Add to group | `sudo gpasswd -a john developers` |
-| `gpasswd -d user group` | Remove from group | `sudo gpasswd -d john developers` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `groupadd groupname` | Create group | `sudo groupadd developers` | Create a new group |
+| `groupmod -n newname oldname` | Rename group | `sudo groupmod -n devs developers` | `-n` = **n**ew name |
+| `groupdel groupname` | Delete group | `sudo groupdel obsoletegroup` | Remove a group |
+| `usermod -g group user` | Change primary group | `sudo usermod -g developers john` | `-g` = primary **g**roup |
+| `usermod -a -G g1,g2 user` | Add to groups | `sudo usermod -a -G sudo,docker mary` | `-a -G` = **a**dd to **G**roups |
+| `gpasswd -a user group` | Add to group | `sudo gpasswd -a john developers` | `-a` = **a**dd user |
+| `gpasswd -d user group` | Remove from group | `sudo gpasswd -d john developers` | `-d` = **d**elete user |
 
 ### Group Information Files
 
-| File | Purpose | View Command |
-|:-----|:--------|:-------------|
-| `/etc/group` | Group definitions | `cat /etc/group` |
-| `/etc/gshadow` | Group passwords | `sudo cat /etc/gshadow` |
+| File | Purpose | View Command | Remember |
+|:-----|:--------|:-------------|:---------|
+| `/etc/group` | Group definitions | `cat /etc/group` | Group membership list |
+| `/etc/gshadow` | Group passwords | `sudo cat /etc/gshadow` | Secured group info |
 
 ## Understanding File Permissions
 
-### Permission Types
+### Permission Types Explained
 
-| Symbol | Value | Type | File Effect | Directory Effect |
-|:-------|:------|:-----|:------------|:----------------|
-| `r` | 4 | Read | View contents | List contents |
-| `w` | 2 | Write | Modify | Create/delete files |
-| `x` | 1 | Execute | Run as program | Enter directory |
-| `-` | 0 | None | Access denied | Access denied |
+| Symbol | Value | Type | File Effect | Directory Effect | Remember |
+|:-------|:------|:-----|:------------|:----------------|:---------|
+| `r` | 4 | Read | View contents | List contents | Read contents |
+| `w` | 2 | Write | Modify | Create/delete files | Alter contents |
+| `x` | 1 | Execute | Run as program | Enter directory | Run or traverse |
+| `-` | 0 | None | Access denied | Access denied | No access |
 
 ### Permission Classes
 
-| Symbol | Class | Description |
-|:-------|:------|:------------|
-| `u` | User | Owner |
-| `g` | Group | Group members |
-| `o` | Others | Everyone else |
-| `a` | All | All users |
+| Symbol | Class | Description | Remember |
+|:-------|:------|:------------|:---------|
+| `u` | User | Owner | **U**ser who owns it |
+| `g` | Group | Group members | **G**roup assigned to it |
+| `o` | Others | Everyone else | **O**ther/all others |
+| `a` | All | All users | **A**ll of the above |
 
 ### Permissions Notation
 
@@ -328,45 +308,45 @@ sudo dnf install kernel-devel gcc
 
 ### Core Commands
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `ls -l file` | Show permissions | `ls -l /etc/passwd` |
-| `ls -ld dir` | Show dir permissions | `ls -ld /home/john` |
-| `chmod perm file` | Change permissions | `chmod 755 script.sh` |
-| `chown user:group file` | Change owner & group | `sudo chown john:developers file.txt` |
-| `chown user file` | Change owner only | `sudo chown john file.txt` |
-| `chgrp group file` | Change group only | `sudo chgrp developers file.txt` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `ls -l file` | Show permissions | `ls -l /etc/passwd` | Long listing includes permissions |
+| `ls -ld dir` | Show dir permissions | `ls -ld /home/john` | `-d` shows directory itself |
+| `chmod perm file` | Change permissions | `chmod 755 script.sh` | **Ch**ange **mod**e |
+| `chown user:group file` | Change owner & group | `sudo chown john:developers file.txt` | **Ch**ange **own**er |
+| `chown user file` | Change owner only | `sudo chown john file.txt` | Owner only |
+| `chgrp group file` | Change group only | `sudo chgrp developers file.txt` | **Ch**ange **gr**ou**p** |
 
 ### Common Permission Values
 
-| Numeric | Symbolic | Meaning | Typical Use |
-|:--------|:---------|:--------|:------------|
-| `755` | `rwxr-xr-x` | Owner all, others read/execute | Scripts, directories |
-| `700` | `rwx------` | Owner all, no others | Private scripts |
-| `644` | `rw-r--r--` | Owner read/write, others read | Regular files |
-| `600` | `rw-------` | Owner read/write only | Sensitive configs |
-| `444` | `r--r--r--` | Read-only for all | Reference files |
+| Numeric | Symbolic | Meaning | Typical Use | Remember |
+|:--------|:---------|:--------|:------------|:---------|
+| `755` | `rwxr-xr-x` | Owner all, others read/execute | Scripts, directories | Common script/directory perms |
+| `700` | `rwx------` | Owner all, no others | Private scripts | Private to owner |
+| `644` | `rw-r--r--` | Owner read/write, others read | Regular files | Standard file perms |
+| `600` | `rw-------` | Owner read/write only | Sensitive configs | Private files |
+| `444` | `r--r--r--` | Read-only for all | Reference files | Universal read-only |
 
 ### Symbolic Permission Mode
 
-| Command | Effect |
-|:--------|:-------|
-| `chmod u+x file` | Add execute for owner |
-| `chmod g-w file` | Remove write from group |
-| `chmod o=r file` | Set others to read-only |
-| `chmod a+r file` | Add read for all |
-| `chmod -R g+w dir` | Recursively add group write |
+| Command | Effect | Remember |
+|:--------|:-------|:---------|
+| `chmod u+x file` | Add execute for owner | **u+x** = **u**ser add e**x**ecute |
+| `chmod g-w file` | Remove write from group | **g-w** = **g**roup minus **w**rite |
+| `chmod o=r file` | Set others to read-only | **o=r** = **o**thers set to **r**ead |
+| `chmod a+r file` | Add read for all | **a+r** = **a**ll add **r**ead |
+| `chmod -R g+w dir` | Recursively add group write | **-R** = **R**ecursive change |
 
 ## Special Permissions
 
-| Command | Description | Effect |
-|:--------|:------------|:-------|
-| `chmod u+s file` | Set SUID | Execute as owner |
-| `chmod 4755 file` | Set SUID (numeric) | Same as above |
-| `chmod g+s dir` | Set SGID on directory | New files inherit group |
-| `chmod 2775 dir` | Set SGID (numeric) | Same as `g+s` |
-| `chmod o+t dir` | Set sticky bit | Only owner can delete files |
-| `chmod 1777 dir` | Set sticky bit (numeric) | Same as `o+t` |
+| Command | Description | Effect | Remember |
+|:--------|:------------|:-------|:---------|
+| `chmod u+s file` | Set SUID | Execute as owner | **S**et **U**ser **ID** |
+| `chmod 4755 file` | Set SUID (numeric) | Same as above | **4**=SUID, then normal perms |
+| `chmod g+s dir` | Set SGID on directory | New files inherit group | **S**et **G**roup **ID** |
+| `chmod 2775 dir` | Set SGID (numeric) | Same as `g+s` | **2**=SGID, then normal perms |
+| `chmod o+t dir` | Set sticky bit | Only owner can delete files | **T**=sticky bit |
+| `chmod 1777 dir` | Set sticky bit (numeric) | Same as `o+t` | **1**=sticky, then normal perms |
 
 ### Examples
 
@@ -378,21 +358,21 @@ sudo dnf install kernel-devel gcc
 
 ### Default Permissions with umask
 
-| Command | Description | Result |
-|:--------|:------------|:-------|
-| `umask` | Show current umask | Typically `022` or `002` |
-| `umask 022` | Set umask | Files: 644, Dirs: 755 |
-| `umask 027` | Restrictive umask | Files: 640, Dirs: 750 |
+| Command | Description | Result | Remember |
+|:--------|:------------|:-------|:---------|
+| `umask` | Show current umask | Typically `022` or `002` | Current permission mask |
+| `umask 022` | Set umask | Files: 644, Dirs: 755 | Common server setting |
+| `umask 027` | Restrictive umask | Files: 640, Dirs: 750 | More secure setting |
 
 ### Access Control Lists (ACLs)
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `getfacl file` | Show ACLs | `getfacl /shared/project.txt` |
-| `setfacl -m u:user:rw file` | Add user ACL | `setfacl -m u:john:rw /shared/project.txt` |
-| `setfacl -m g:group:rx file` | Add group ACL | `setfacl -m g:devs:rx /shared/script.sh` |
-| `setfacl -x u:user file` | Remove user ACL | `setfacl -x u:john /shared/project.txt` |
-| `setfacl -b file` | Remove all ACLs | `setfacl -b /shared/project.txt` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `getfacl file` | Show ACLs | `getfacl /shared/project.txt` | **Get** **f**ile **ACL** |
+| `setfacl -m u:user:rw file` | Add user ACL | `setfacl -m u:john:rw /shared/project.txt` | **Set** **f**ile **ACL** - **m**odify |
+| `setfacl -m g:group:rx file` | Add group ACL | `setfacl -m g:devs:rx /shared/script.sh` | Add group permissions |
+| `setfacl -x u:user file` | Remove user ACL | `setfacl -x u:john /shared/project.txt` | **-x** = remove |
+| `setfacl -b file` | Remove all ACLs | `setfacl -b /shared/project.txt` | **-b** = remove all |
 
 ## Common Permission Recipes
 
@@ -451,51 +431,43 @@ Every command has three standard streams:
 - **stdout (1)**: Standard output - where successful command results are written
 - **stderr (2)**: Standard error - where error messages are written
 
-## 📤 Output Redirection
+## 📤 Output Redirection Cheatsheet
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `command > file` | Redirect **stdout** to file (overwrite) | `ls > filelist.txt` |
-| `command >> file` | Redirect **stdout** to file (append) | `echo "new line" >> notes.txt` |
-| `command 2> file` | Redirect **stderr** to file (overwrite) | `find / -name abc 2> errors.log` |
-| `command 2>> file` | Redirect **stderr** to file (append) | `gcc program.c 2>> compile_errors.log` |
-| `command > file 2>&1` | Redirect **both stdout and stderr** to same file | `ls -la /root > output.txt 2>&1` |
-| `command &> file` | Redirect both streams (shorthand, overwrite) | `find / -name "*.conf" &> results.txt` |
-| `command &>> file` | Redirect both streams (shorthand, append) | `make &>> build.log` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `command > file` | Redirect **stdout** to file (overwrite) | `ls > filelist.txt` | Overwrite file |
+| `command >> file` | Redirect **stdout** to file (append) | `echo "new line" >> notes.txt` | Add to end of file |
+| `command 2> file` | Redirect **stderr** to file (overwrite) | `find / -name abc 2> errors.log` | Capture errors only |
+| `command 2>> file` | Redirect **stderr** to file (append) | `gcc program.c 2>> compile_errors.log` | Add errors to log |
+| `command > file 2>&1` | Redirect **both stdout and stderr** to same file | `ls -la /root > output.txt 2>&1` | Everything to one file |
+| `command &> file` | Redirect both streams (shorthand, overwrite) | `find / -name "*.conf" &> results.txt` | Modern shorthand |
+| `command &>> file` | Redirect both streams (shorthand, append) | `make &>> build.log` | Append everything |
 
 ## 📥 Input Redirection
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `command < file` | Use file as **stdin** for command | `sort < unsorted.txt` |
-| `command << MARKER` | Use here-document (multi-line input) | `cat << EOF > script.sh` |
-| `command <<< "string"` | Use here-string (single string input) | `grep "user" <<< "username: admin"` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `command < file` | Use file as **stdin** for command | `sort < unsorted.txt` | File feeds command |
+| `command << MARKER` | Use here-document (multi-line input) | `cat << EOF > script.sh` | Multi-line input |
+| `command <<< "string"` | Use here-string (single string input) | `grep "user" <<< "username: admin"` | String as input |
 
 ## 🔗 Pipes
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `cmd1 \| cmd2` | Send output of cmd1 to input of cmd2 | `ls -la \| grep ".txt"` |
-| `cmd1 \| tee file \| cmd2` | Send output to both file and cmd2 | `ls \| tee files.txt \| grep ".log"` |
-| `cmd1 \|& cmd2` | Pipe both stdout and stderr | `find / -type f -name "*.conf" \|& grep -v "Permission denied"` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `cmd1 \| cmd2` | Send output of cmd1 to input of cmd2 | `ls -la \| grep ".txt"` | Output becomes input |
+| `cmd1 \| tee file \| cmd2` | Send output to both file and cmd2 | `ls \| tee files.txt \| grep ".log"` | T-junction for output |
+| `cmd1 \|& cmd2` | Pipe both stdout and stderr | `find / -type f -name "*.conf" \|& grep -v "Permission denied"` | Pipe everything |
 
 ## 🗑️ Discard Output
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `command > /dev/null` | Discard standard output | `apt update > /dev/null` |
-| `command 2> /dev/null` | Discard standard error | `find / -name core 2> /dev/null` |
-| `command &> /dev/null` | Discard both stdout and stderr | `wget https://example.com &> /dev/null` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `command > /dev/null` | Discard standard output | `apt update > /dev/null` | Send to black hole |
+| `command 2> /dev/null` | Discard standard error | `find / -name core 2> /dev/null` | Hide error messages |
+| `command &> /dev/null` | Discard both stdout and stderr | `wget https://example.com &> /dev/null` | Silent operation |
 
-## 📄 File Content Redirection
-
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `cat file1 > file2` | Copy content from file1 to file2 (overwrite) | `cat source.txt > destination.txt` |
-| `cat file1 >> file2` | Append contents of file1 to file2 | `cat header.txt >> document.txt` |
-| `cat < file1 > file2` | Redirect file1 contents to file2 | `cat < input.txt > output.txt` |
-
-### Here Document Example
+## Here Document Example
 
 ```bash
 # Create a script with multi-line content
@@ -513,7 +485,7 @@ sudo tee -a /etc/hosts << EOF
 EOF
 ```
 
-## 💡 Pro Tips
+## 💡 Redirection Pro Tips
 
 1. Use `tee` to view output while saving to a file:
    ```bash
@@ -530,12 +502,7 @@ EOF
    command > output.log 2> error.log
    ```
 
-4. Redirect and append to same file without clobbering:
-   ```bash
-   command >> logfile.txt 2>> logfile.txt
-   ```
-
-5. Remember the file descriptor numbers:
+4. Remember the file descriptor numbers:
    - **0**: stdin
    - **1**: stdout
    - **2**: stderr
@@ -546,84 +513,71 @@ EOF
 
 Commands for viewing file contents, managing output, and retrieving system/command information.
 
-## 📄 File Viewing & Output
+## 📄 File Viewing & Output Reference
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `cat file` | Display entire file content | `cat /etc/hostname` |
-| `less file` | View file with pagination & search | `less /var/log/syslog` |
-| `more file` | View file one screen at a time | `more README.md` |
-| `head file` | View first 10 lines of file | `head -n 20 large_file.txt` |
-| `tail file` | View last 10 lines of file | `tail -f /var/log/auth.log` |
-| `file filename` | Identify file type | `file unknown_file` |
-| `tee file` | Read from stdin, write to stdout & file | `ls -la | tee listing.txt` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `cat file` | Display entire file content | `cat /etc/hostname` | Display all at once |
+| `less file` | View file with pagination & search | `less /var/log/syslog` | Best for large files |
+| `more file` | View file one screen at a time | `more README.md` | One-way scrolling |
+| `head file` | View first 10 lines of file | `head -n 20 large_file.txt` | Top of file |
+| `tail file` | View last 10 lines of file | `tail -f /var/log/auth.log` | End of file, `-f` follows updates |
+| `file filename` | Identify file type | `file unknown_file` | What kind of file is this? |
+| `tee file` | Read from stdin, write to stdout & file | `ls -la | tee listing.txt` | T-junction for data |
 
 ### 📊 less Navigation Keys
 
-| Key | Action |
-|:----|:-------|
-| `Space` or `Page Down` | Forward one page |
-| `b` or `Page Up` | Back one page |
-| `/pattern` | Search forward for "pattern" |
-| `?pattern` | Search backward for "pattern" |
-| `n` | Next search match |
-| `N` | Previous search match |
-| `q` | Quit |
-| `g` | Go to first line |
-| `G` | Go to last line |
+| Key | Action | Remember |
+|:----|:-------|:---------|
+| `Space` or `Page Down` | Forward one page | Next page |
+| `b` or `Page Up` | Back one page | Previous page |
+| `/pattern` | Search forward for "pattern" | Find text |
+| `?pattern` | Search backward for "pattern" | Find going up |
+| `n` | Next search match | Next match |
+| `N` | Previous search match | Previous match |
+| `q` | Quit | Exit less |
+| `g` | Go to first line | Top of file |
+| `G` | Go to last line | Bottom of file |
 
 ## 🔍 Command & User Information
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `w` | Show logged-in users and activity | `w` |
-| `who` | List currently logged-in users | `who -a` |
-| `whoami` | Show current username | `whoami` |
-| `id` | Show user identity and groups | `id username` |
-| `which command` | Show path of executable | `which python` |
-| `whatis command` | Brief description of command | `whatis grep` |
-| `whereis command` | Locate binary, source, manual | `whereis bash` |
-| `last` | Show login history & reboots | `last -10` |
-| `lastlog` | Last login time for all users | `lastlog | grep -v "Never"` |
-| `type command` | Show how command would be interpreted | `type ls` |
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `w` | Show logged-in users and activity | `w` | Who is logged in and what they're doing |
+| `who` | List currently logged-in users | `who -a` | Who is logged in (simpler) |
+| `whoami` | Show current username | `whoami` | Who am I logged in as? |
+| `id` | Show user identity and groups | `id username` | User and group IDs |
+| `which command` | Show path of executable | `which python` | **Which** binary is used |
+| `whatis command` | Brief description of command | `whatis grep` | **What is** this command |
+| `whereis command` | Locate binary, source, manual | `whereis bash` | **Where is** everything related |
+| `last` | Show login history & reboots | `last -10` | **Last** logins |
+| `lastlog` | Last login time for all users | `lastlog | grep -v "Never"` | **Last log**in for everyone |
+| `type command` | Show how command would be interpreted | `type ls` | Command **type** (alias, builtin, etc.) |
 
 ## 📖 Help & Documentation
 
-| Command | Description | Example |
-|:--------|:------------|:--------|
-| `man command` | Display manual page | `man find` |
-| `info command` | Show GNU info documentation | `info coreutils` |
-| `command --help` | Brief command help | `grep --help` |
-| `apropos keyword` | Search man pages for keyword | `apropos partition` |
-
-## 💡 Pro Tips
-
-1. Live-monitor logs with tail:
-   ```bash
-   tail -f /var/log/syslog
-   ```
-
-2. Use less with syntax highlighting for code:
-   ```bash
-   less -R file.py   # When used with syntax highlighters
-   ```
-
-3. Combine multiple commands to find information:
-   ```bash
-   ps aux | grep httpd | less
-   ```
-
-4. Search through command history:
-   ```bash
-   history | grep "apt install"
-   ```
-
-5. View only specific parts of a file with sed:
-   ```bash
-   sed -n '10,20p' file.txt | less
-   ```
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `man command` | Display manual page | `man find` | **Man**ual page |
+| `info command` | Show GNU info documentation | `info coreutils` | More detailed **info** |
+| `command --help` | Brief command help | `grep --help` | Quick help |
+| `apropos keyword` | Search man pages for keyword | `apropos partition` | Find commands **apropos** to a task |
 
 ---
+
+# 💽 Partitioning & Mounting
+
+Commands for managing disk partitions, filesystems, and mounting in Linux systems.
+
+## 📊 Disk Usage & Space
+
+| Command | Description | Example | Remember |
+|:--------|:------------|:--------|:---------|
+| `df` | Show filesystem disk space usage | `df -h` (human-readable) | **D**isk **F**ree space |
+| `df -i` | Show inode usage | `df -i /home` | **I**node usage |
+| `du` | Show directory space usage | `du -sh /var` | **D**isk **U**sage |
+| `lsblk` | List block devices | `lsblk -f` (with filesystems) | **L**i**s**t **b**loc**k** devices |
+| `ls -li` | List files with inode numbers | `
 
 # 💽 Partitioning & Mounting
 
