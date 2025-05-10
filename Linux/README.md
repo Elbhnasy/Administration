@@ -579,7 +579,6 @@ Commands for managing disk partitions, filesystems, and mounting in Linux system
 | `lsblk` | List block devices | `lsblk -f` (with filesystems) | **L**i**s**t **b**loc**k** devices |
 | `ls -li` | List files with inode numbers | `
 
-
 ## 🔗 File Links
 
 | Command | Description | Example |
@@ -656,6 +655,126 @@ UUID=1234-5678 /data          xfs         defaults         0     2
 | `mount -t cifs //server/share /mnt` | Mount SMB/CIFS share | `sudo mount -t cifs //server/docs /mnt/docs -o user=name` |
 | `sshfs user@host:/path /mnt` | Mount via SSHFS | `sshfs admin@server:/var/log /mnt/logs` |
 
+## 📄 Understanding /etc/fstab
+
+The `/etc/fstab` file controls how filesystems are mounted at boot time:
+
+```
+# Device           Mount Point     FS Type   Options                     Dump  Pass
+/dev/sda1          /              ext4      defaults                     0     1
+/dev/sda2          /home          ext4      defaults,noatime             0     2
+UUID=1234-5678     /data          xfs       defaults,nofail              0     2
+LABEL=backup       /backup        ext4      defaults,noauto,user         0     0
+//server/share     /mnt/share     cifs      credentials=/etc/cifs-cred   0     0
+```
+
+| Field | Description | Examples |
+|:------|:------------|:---------|
+| Device | Path, UUID, or LABEL | `/dev/sda1`, `UUID=1234-5678`, `LABEL=backup` |
+| Mount Point | Directory | `/`, `/home`, `/mnt/data` |
+| Filesystem Type | Type of filesystem | `ext4`, `xfs`, `btrfs`, `nfs`, `cifs` |
+| Mount Options | Comma-separated | `defaults`, `ro`, `noatime`, `user` |
+| Dump | Backup flag (0=no, 1=yes) | Usually `0` on modern systems |
+| Pass | fsck order (0=skip, 1=root, 2=others) | `1` for /, `2` for others, `0` to skip |
+
+### Common Mount Options
+
+| Option | Description | Use Case |
+|:-------|:------------|:---------|
+| `defaults` | rw,suid,dev,exec,auto,nouser,async | Standard baseline |
+| `noatime` | Don't update access times | Performance boost, SSD longevity |
+| `ro` | Read-only | Protect from changes |
+| `nofail` | Skip if device not present | Removable devices |
+| `auto`/`noauto` | Mount at boot / don't mount at boot | Selective mounting |
+| `user`/`nouser` | Allow/prevent regular users to mount | User access control |
+| `exec`/`noexec` | Allow/prevent executable binaries | Security hardening |
+
+## 🔍 Troubleshooting Mount Issues
+
+| Problem | Diagnostic Command | Solution |
+|:--------|:-------------------|:---------|
+| Mount fails | `dmesg \| tail` | Check kernel messages for errors |
+| Device not found | `lsblk`, `fdisk -l` | Verify device exists and is connected |
+| Filesystem errors | `fsck /dev/sdXn` | Check and repair filesystem |
+| "busy" device | `lsof +f -- /mountpoint` | Find processes using the filesystem |
+| Permission denied | `ls -ld /mountpoint` | Check directory permissions |
+| Wrong filesystem type | `blkid /dev/sdXn` | Verify correct filesystem type |
+
+### Common Solutions
+
+```bash
+# Force unmount a busy filesystem
+sudo umount -l /mnt/point   # Lazy unmount
+
+# Kill all processes using a filesystem
+sudo fuser -km /mnt/point   # Kill processes using mountpoint
+
+# Remount filesystem in read-only mode (recovery)
+sudo mount -o remount,ro /dev/sdXn
+
+# Debug mount issues with verbose output
+sudo mount -v /dev/sdXn /mnt/point
+```
+
+## 📦 LVM Management
+
+Logical Volume Management (LVM) provides flexible storage management.
+
+### 🔍 LVM Information Commands
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `pvs` | List physical volumes | `sudo pvs` |
+| `vgs` | List volume groups | `sudo vgs` |
+| `lvs` | List logical volumes | `sudo lvs` |
+| `pvdisplay` | Detailed PV info | `sudo pvdisplay /dev/sdb` |
+| `vgdisplay` | Detailed VG info | `sudo vgdisplay vg_data` |
+| `lvdisplay` | Detailed LV info | `sudo lvdisplay /dev/vg_data/lv_data` |
+
+### 🛠️ Creating LVM Volumes
+
+```bash
+# 1. Create physical volumes
+sudo pvcreate /dev/sdb /dev/sdc
+
+# 2. Create volume group
+sudo vgcreate vg_data /dev/sdb /dev/sdc
+
+# 3. Create logical volume (50GB)
+sudo lvcreate -n lv_data -L 50G vg_data
+
+# 4. Create filesystem and mount
+sudo mkfs.ext4 /dev/vg_data/lv_data
+sudo mkdir -p /mnt/lvdata
+sudo mount /dev/vg_data/lv_data /mnt/lvdata
+```
+
+### 🔄 LVM Resizing Operations
+
+| Command | Description | Example |
+|:--------|:------------|:--------|
+| `lvextend` | Extend logical volume | `sudo lvextend -L +10G /dev/vg_data/lv_data` |
+| `lvreduce` | Shrink logical volume | `sudo lvreduce -L -5G /dev/vg_data/lv_data` |
+| `vgextend` | Add PV to volume group | `sudo vgextend vg_data /dev/sdd` |
+| `pvmove` | Move data between PVs | `sudo pvmove /dev/sdb /dev/sdd` |
+| `resize2fs` | Resize ext filesystem | `sudo resize2fs /dev/vg_data/lv_data` |
+| `xfs_growfs` | Grow XFS filesystem | `sudo xfs_growfs /mnt/lvdata` |
+
+### 📊 LVM Snapshot Management
+
+```bash
+# Create 5GB snapshot of logical volume
+sudo lvcreate -s -n lv_data_snap -L 5G /dev/vg_data/lv_data
+
+# Mount snapshot for backup or inspection
+sudo mkdir -p /mnt/snapshot
+sudo mount /dev/vg_data/lv_data_snap /mnt/snapshot
+
+# Remove snapshot when finished
+sudo umount /mnt/snapshot
+sudo lvremove /dev/vg_data/lv_data_snap
+```
+
 ## 💡 Pro Tips
 
 1. Create filesystem with label:
@@ -684,4 +803,33 @@ UUID=1234-5678 /data          xfs         defaults         0     2
    UUID=abcd-1234 /mnt/data ext4 defaults,noatime 0 2
    ```
 
+6. Use relative paths with symlinks:
+   ```bash
+   # Better for portability
+   ln -s ../shared/config.ini config.ini
+   ```
+
+7. Use systemd mount units for dynamic mounting:
+   ```bash
+   # /etc/systemd/system/mnt-data.mount
+   [Unit]
+   Description=Data Directory Mount
+   
+   [Mount]
+   What=/dev/disk/by-uuid/abcd-1234
+   Where=/mnt/data
+   Type=ext4
+   Options=defaults,noatime
+   
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+8. Check disk health with S.M.A.R.T:
+   ```bash
+   sudo smartctl -a /dev/sda
+   ```
+
 ---
+
+**Note:** Always back up important data before performing partition or filesystem operations. Some commands may vary slightly between different Linux distributions.
