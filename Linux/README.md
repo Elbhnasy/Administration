@@ -760,3 +760,76 @@ sudo mount /dev/vg_data/lv_data /mnt/lvdata
 | `resize2fs` | Resize ext filesystem | `sudo resize2fs /dev/vg_data/lv_data` |
 | `xfs_growfs` | Grow XFS filesystem | `sudo xfs_growfs /mnt/lvdata` |
 
+### 📊 LVM Snapshot Management
+
+```bash
+# Create 5GB snapshot of logical volume
+sudo lvcreate -s -n lv_data_snap -L 5G /dev/vg_data/lv_data
+
+# Mount snapshot for backup or inspection
+sudo mkdir -p /mnt/snapshot
+sudo mount /dev/vg_data/lv_data_snap /mnt/snapshot
+
+# Remove snapshot when finished
+sudo umount /mnt/snapshot
+sudo lvremove /dev/vg_data/lv_data_snap
+```
+
+## 💡 Pro Tips
+
+1. Create filesystem with label:
+   ```bash
+   sudo mkfs.ext4 -L datastore /dev/sdb1
+   ```
+
+2. Mount by label or UUID (more reliable):
+   ```bash
+   sudo mount UUID=1234-5678-90ab-cdef /mnt/data
+   sudo mount LABEL=datastore /mnt/data
+   ```
+
+3. See what's mounted with custom format:
+   ```bash
+   mount | column -t
+   ```
+
+4. Find out which process is using a mounted filesystem:
+   ```bash
+   sudo lsof +f -- /mnt/data
+   ```
+
+5. Make mounting easier with entries in /etc/fstab:
+   ```
+   UUID=abcd-1234 /mnt/data ext4 defaults,noatime 0 2
+   ```
+
+6. Use relative paths with symlinks:
+   ```bash
+   # Better for portability
+   ln -s ../shared/config.ini config.ini
+   ```
+
+7. Use systemd mount units for dynamic mounting:
+   ```bash
+   # /etc/systemd/system/mnt-data.mount
+   [Unit]
+   Description=Data Directory Mount
+   
+   [Mount]
+   What=/dev/disk/by-uuid/abcd-1234
+   Where=/mnt/data
+   Type=ext4
+   Options=defaults,noatime
+   
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+8. Check disk health with S.M.A.R.T:
+   ```bash
+   sudo smartctl -a /dev/sda
+   ```
+
+---
+
+**Note:** Always back up important data before performing partition or filesystem operations. Some commands may vary slightly between different Linux distributions.
